@@ -1,12 +1,12 @@
 import { Router } from "express";
 
+import * as profileController from "../controller/profileController";
+
 const router = Router();
 
 // @route   api/profile
 // @desc    Test route
 // @access  Public
-router.get("/", (req, res, next) => {
-  res.send("Profile Route");
-});
+router.get("/", profileController.getProfile);
 
 export default router;
