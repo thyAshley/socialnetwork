@@ -25,7 +25,7 @@ const authController = __importStar(require("../controller/authController"));
 const router = express_1.Router();
 // @route   GET api/auth
 // @desc    Get auth user information
-// @access  Public
+// @access  Private
 router.get("/", authController.checkJWT, authController.getAuth);
 // @route   POST api/login
 // @desc    Login the user in and issue a token
@@ -34,4 +34,8 @@ router.post("/login", [
     express_validator_1.body("email", "email is required").isEmail(),
     express_validator_1.body("password", "password is required").not().notEmpty(),
 ], authController.postLogin);
+// @route   POST api/user/delete
+// @desc    Delete the user, posts and profile
+// @access  Private
+router.delete("/delete", authController.checkJWT, authController.deleteUser);
 exports.default = router;

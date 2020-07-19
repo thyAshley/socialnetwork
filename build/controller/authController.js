@@ -12,11 +12,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.postLogin = exports.checkJWT = exports.getAuth = void 0;
+exports.deleteUser = exports.postLogin = exports.checkJWT = exports.getAuth = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const express_validator_1 = require("express-validator");
 const User_1 = __importDefault(require("../models/User"));
+const Profile_1 = __importDefault(require("../models/Profile"));
+// @route   GET api/auth
+// @desc    Get auth user information
+// @access  Private
 exports.getAuth = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const user = yield User_1.default.findById({ _id: req.user.id }).select("-password");
@@ -30,7 +34,7 @@ exports.getAuth = (req, res, next) => __awaiter(void 0, void 0, void 0, function
         });
     }
 });
-exports.checkJWT = (req, res, next) => {
+exports.checkJWT = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     const token = (_a = req.headers.authorization) === null || _a === void 0 ? void 0 : _a.split(" ")[1];
     if (!token) {
@@ -41,6 +45,12 @@ exports.checkJWT = (req, res, next) => {
     try {
         const decode = jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET);
         req.user = decode.user;
+        const user = yield User_1.default.findById(req.user.id);
+        if (!user) {
+            return res.status(401).json({
+                msg: "Unauthorized",
+            });
+        }
         next();
     }
     catch (err) {
@@ -48,7 +58,10 @@ exports.checkJWT = (req, res, next) => {
             msg: "Token is not valid",
         });
     }
-};
+});
+// @route   POST api/login
+// @desc    Login the user in and issue a token
+// @access  Public
 exports.postLogin = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const error = express_validator_1.validationResult(req);
     if (!error.isEmpty()) {
@@ -87,6 +100,24 @@ exports.postLogin = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
     catch (err) {
         res.status(500).json({
             msg: "Unable to login, please try again",
+        });
+    }
+});
+// @route   POST api/user/delete
+// @desc    Delete the user, posts and profile
+// @access  Private
+exports.deleteUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        yield Profile_1.default.findOneAndRemove({ user: req.user.id });
+        yield User_1.default.findOneAndRemove({ _id: req.user.id });
+        res.status(204).json({
+            msg: "user successfully deleted",
+        });
+    }
+    catch (error) {
+        console.log(error.message);
+        res.status(500).json({
+            msg: "Server Error",
         });
     }
 });
