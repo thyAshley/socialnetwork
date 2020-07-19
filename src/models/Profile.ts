@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import { IUserSchema } from "./User";
 
-interface IProfileSchema extends mongoose.Document {
+export interface IProfileSchema extends mongoose.Document {
   user: IUserSchema["_id"];
   company: string;
   website: string;
@@ -62,6 +62,7 @@ const profileSchema = new mongoose.Schema({
   },
   skills: {
     type: [String],
+    required: true,
   },
   bio: {
     type: String,

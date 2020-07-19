@@ -20,6 +20,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
+const express_validator_1 = require("express-validator");
 const profileController = __importStar(require("../controller/profileController"));
 const authController = __importStar(require("../controller/authController"));
 const router = express_1.Router();
@@ -27,4 +28,12 @@ const router = express_1.Router();
 // @desc    Get current users profile
 // @access  Private
 router.get("/me", authController.checkJWT, profileController.getProfile);
+// @route   POST api/profile
+// @desc    Create or update user profile
+// @access  Private
+router.post("/", [
+    authController.checkJWT,
+    express_validator_1.body("status", "Status is required").not().isEmpty(),
+    express_validator_1.body("skills", " Skills is required").not().isEmpty(),
+], profileController.postProfile);
 exports.default = router;

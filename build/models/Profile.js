@@ -24,6 +24,7 @@ const profileSchema = new mongoose_1.default.Schema({
     },
     skills: {
         type: [String],
+        required: true,
     },
     bio: {
         type: String,
