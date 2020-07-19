@@ -17,7 +17,7 @@ const router = Router();
 
 // @route   GET api/auth
 // @desc    Get auth user information
-// @access  Public
+// @access  Private
 router.get("/", authController.checkJWT, authController.getAuth);
 
 // @route   POST api/login
@@ -31,5 +31,10 @@ router.post(
   ],
   authController.postLogin
 );
+
+// @route   POST api/user/delete
+// @desc    Delete the user, posts and profile
+// @access  Private
+router.delete("/delete", authController.checkJWT, authController.deleteUser);
 
 export default router;

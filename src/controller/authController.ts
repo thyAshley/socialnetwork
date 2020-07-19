@@ -4,7 +4,11 @@ import bcrypt from "bcryptjs";
 import { validationResult } from "express-validator";
 
 import User from "../models/User";
+import Profile from "../models/Profile";
 
+// @route   GET api/auth
+// @desc    Get auth user information
+// @access  Private
 export const getAuth = async (
   req: Request,
   res: Response,
@@ -22,7 +26,11 @@ export const getAuth = async (
   }
 };
 
-export const checkJWT = (req: Request, res: Response, next: NextFunction) => {
+export const checkJWT = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const token = req.headers.authorization?.split(" ")[1];
   if (!token) {
     return res.status(401).json({
@@ -33,6 +41,13 @@ export const checkJWT = (req: Request, res: Response, next: NextFunction) => {
   try {
     const decode = <any>jwt.verify(token, process.env.JWT_SECRET as string);
     req.user = decode.user;
+    console.log(req.user);
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(401).json({
+        msg: "Unauthorized",
+      });
+    }
     next();
   } catch (err) {
     return res.status(401).json({
@@ -41,6 +56,9 @@ export const checkJWT = (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
+// @route   POST api/login
+// @desc    Login the user in and issue a token
+// @access  Public
 export const postLogin = async (
   req: Request,
   res: Response,
@@ -92,6 +110,28 @@ export const postLogin = async (
   } catch (err) {
     res.status(500).json({
       msg: "Unable to login, please try again",
+    });
+  }
+};
+
+// @route   POST api/user/delete
+// @desc    Delete the user, posts and profile
+// @access  Private
+export const deleteUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    await Profile.findOneAndRemove({ user: req.user.id });
+    await User.findOneAndRemove({ _id: req.user.id });
+    res.status(204).json({
+      msg: "user successfully deleted",
+    });
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({
+      msg: "Server Error",
     });
   }
 };
