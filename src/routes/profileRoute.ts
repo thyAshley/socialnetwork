@@ -24,4 +24,9 @@ router.post(
   profileController.postProfile
 );
 
+// @route   GET api/profile
+// @desc    Get all users profile
+// @access  Private
+router.get("/", profileController.getProfiles);
+
 export default router;

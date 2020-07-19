@@ -36,4 +36,8 @@ router.post("/", [
     express_validator_1.body("status", "Status is required").not().isEmpty(),
     express_validator_1.body("skills", " Skills is required").not().isEmpty(),
 ], profileController.postProfile);
+// @route   GET api/profile
+// @desc    Get all users profile
+// @access  Private
+router.get("/", profileController.getProfiles);
 exports.default = router;
