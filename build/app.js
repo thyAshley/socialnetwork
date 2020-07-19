@@ -21,10 +21,10 @@ app.get("/", (req, res, next) => {
     res.send("API Running");
 });
 // Routes
-app.use("/user", userRoute_1.default);
-app.use("/auth", authRoute_1.default);
-app.use("/posts", postsRoute_1.default);
-app.use("/profile", profileRoute_1.default);
+app.use("/api/user", userRoute_1.default);
+app.use("/api/auth", authRoute_1.default);
+app.use("/api/posts", postsRoute_1.default);
+app.use("/api/profile", profileRoute_1.default);
 // Connect Node Appplication
 app.listen(PORT, () => {
     console.log(`server started on port ${PORT}`);

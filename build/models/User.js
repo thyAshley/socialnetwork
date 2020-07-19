@@ -20,6 +20,7 @@ const userSchema = new mongoose_1.default.Schema({
     },
     avatar: {
         type: String,
+        default: "https://png.pngitem.com/pimgs/s/508-5087236_tab-profile-f-user-icon-white-fill-hd.png",
     },
     date: {
         type: Date,

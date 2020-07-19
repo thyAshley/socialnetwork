@@ -21,10 +21,10 @@ app.get("/", (req, res, next) => {
 });
 
 // Routes
-app.use("/user", userRoute);
-app.use("/auth", authRoute);
-app.use("/posts", postsRoute);
-app.use("/profile", profileRoute);
+app.use("/api/user", userRoute);
+app.use("/api/auth", authRoute);
+app.use("/api/posts", postsRoute);
+app.use("/api/profile", profileRoute);
 
 // Connect Node Appplication
 app.listen(PORT, () => {
