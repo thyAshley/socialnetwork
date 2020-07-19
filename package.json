@@ -19,7 +19,6 @@
   },
   "homepage": "https://github.com/thyAshley/socialnetwork#readme",
   "dependencies": {
-    "@types/bcryptjs": "^2.4.2",
     "axios": "^0.19.2",
     "bcryptjs": "^2.4.3",
     "dotenv": "^8.2.0",
@@ -31,7 +30,9 @@
   },
   "devDependencies": {
     "@types/express": "^4.17.7",
+    "@types/jsonwebtoken": "^8.5.0",
     "@types/mongoose": "^5.7.32",
-    "concurrently": "^5.2.0"
+    "concurrently": "^5.2.0",
+    "@types/bcryptjs": "^2.4.2"
   }
 }

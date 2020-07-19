@@ -23,7 +23,7 @@ const express_1 = require("express");
 const userController = __importStar(require("../controller/userController"));
 const express_validator_1 = require("express-validator");
 const router = express_1.Router();
-// @route   GET api/user
+// @route   POST api/user
 // @desc    Register user
 // @access  Public
 router.post("/", [

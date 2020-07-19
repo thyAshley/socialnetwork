@@ -23,7 +23,11 @@ const express_1 = require("express");
 const authController = __importStar(require("../controller/authController"));
 const router = express_1.Router();
 // @route   GET api/auth
-// @desc    Test route
+// @desc    Get auth user information
 // @access  Public
-router.get("/", authController.getAuth);
+router.get("/", authController.checkJWT, authController.getAuth);
+// @route   POST api/login
+// @desc    Login in the user
+// @access  Public
+router.post("/login", authController.postLogin);
 exports.default = router;

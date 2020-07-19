@@ -6,7 +6,7 @@ import { body } from "express-validator";
 
 const router = Router();
 
-// @route   GET api/user
+// @route   POST api/user
 // @desc    Register user
 // @access  Public
 router.post(

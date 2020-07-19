@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { validationResult } from "express-validator";
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 
 import User from "../models/User";
 
@@ -47,15 +48,25 @@ export const getUser = async (
       email,
       password: encPassword,
     });
-    try {
-      await user.save();
-      console.log("user registered");
-      return res.status(201).json({
-        respose: "User created",
-      });
-    } catch (err) {
-      console.log(err);
-    }
+
+    await user.save();
+    const payload = {
+      user: {
+        id: user._id as string,
+      },
+    };
+
+    jwt.sign(
+      payload as object,
+      process.env.JWT_SECRET as string,
+      { expiresIn: 3600 },
+      (err, token) => {
+        if (err) throw err;
+        return res.status(201).json({
+          token,
+        });
+      }
+    );
   } catch (err) {
     console.log(err.message);
     res.status(500).send("Server error");

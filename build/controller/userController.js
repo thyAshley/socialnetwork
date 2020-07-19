@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getUser = void 0;
 const express_validator_1 = require("express-validator");
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const User_1 = __importDefault(require("../models/User"));
 exports.getUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     // Check if Input from user is valid
@@ -43,16 +44,19 @@ exports.getUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function
             email,
             password: encPassword,
         });
-        try {
-            yield user.save();
-            console.log("user registered");
+        yield user.save();
+        const payload = {
+            user: {
+                id: user._id,
+            },
+        };
+        jsonwebtoken_1.default.sign(payload, process.env.JWT_SECRET, { expiresIn: 3600 }, (err, token) => {
+            if (err)
+                throw err;
             return res.status(201).json({
-                respose: "User created",
+                token,
             });
-        }
-        catch (err) {
-            console.log(err);
-        }
+        });
     }
     catch (err) {
         console.log(err.message);
