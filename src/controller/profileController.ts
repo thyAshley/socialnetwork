@@ -4,6 +4,9 @@ import { validationResult } from "express-validator";
 import Profile, { IProfileSchema } from "../models/Profile";
 import User from "../models/User";
 
+// @route   GET api/profile/me
+// @desc    Get current users profile
+// @access  Private
 export const getProfile = async (
   req: Request,
   res: Response,
@@ -29,6 +32,9 @@ export const getProfile = async (
   }
 };
 
+// @route   POST api/profile
+// @desc    Create or update user profile
+// @access  Private
 export const postProfile = async (
   req: Request,
   res: Response,
@@ -98,6 +104,65 @@ export const postProfile = async (
     console.log(err.message);
     res.status(500).json({
       msg: "Server error",
+    });
+  }
+};
+
+// @route   GET api/profile
+// @desc    Get all user profile
+// @access  Private
+export const getProfiles = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const profiles = await Profile.find().populate(
+      "user",
+      ["name", "avatar"],
+      "User"
+    );
+    res.status(200).json(profiles);
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({
+      msg: "Server Error",
+    });
+  }
+};
+
+// @route   GET api/profile/user/:userId
+// @desc    Get users profile
+// @access  Public
+export const getUserProfile = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const userId = req.params.userId;
+  try {
+    const profile = await Profile.findOne({ user: userId }).populate(
+      "user",
+      ["name", "avatar"],
+      "User"
+    );
+    if (!profile) {
+      res.status(400).json({
+        msg: "Cannot find profile",
+      });
+    }
+    res.status(200).json({
+      profile,
+    });
+  } catch (error) {
+    console.log(error.message);
+    if (error.kind === "ObjectId") {
+      res.status(400).json({
+        msg: "Cannot find profile",
+      });
+    }
+    res.status(500).json({
+      msg: "Server Error",
     });
   }
 };

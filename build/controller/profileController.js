@@ -12,9 +12,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.postProfile = exports.getProfile = void 0;
+exports.getUserProfile = exports.getProfiles = exports.postProfile = exports.getProfile = void 0;
 const express_validator_1 = require("express-validator");
 const Profile_1 = __importDefault(require("../models/Profile"));
+// @route   GET api/profile/me
+// @desc    Get current users profile
+// @access  Private
 exports.getProfile = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const profile = yield Profile_1.default.findOne({ user: req.user.id }).populate("user", ["name", "avatar"], "User");
@@ -30,6 +33,9 @@ exports.getProfile = (req, res, next) => __awaiter(void 0, void 0, void 0, funct
         res.status(500).send("Server Error");
     }
 });
+// @route   POST api/profile
+// @desc    Create or update user profile
+// @access  Private
 exports.postProfile = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const errors = express_validator_1.validationResult(req);
     if (!errors.isEmpty()) {
@@ -74,6 +80,49 @@ exports.postProfile = (req, res, next) => __awaiter(void 0, void 0, void 0, func
         console.log(err.message);
         res.status(500).json({
             msg: "Server error",
+        });
+    }
+});
+// @route   GET api/profile
+// @desc    Get all user profile
+// @access  Private
+exports.getProfiles = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const profiles = yield Profile_1.default.find().populate("user", ["name", "avatar"], "User");
+        res.status(200).json(profiles);
+    }
+    catch (error) {
+        console.log(error.message);
+        res.status(500).json({
+            msg: "Server Error",
+        });
+    }
+});
+// @route   GET api/profile/user/:userId
+// @desc    Get users profile
+// @access  Public
+exports.getUserProfile = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const userId = req.params.userId;
+    try {
+        const profile = yield Profile_1.default.findOne({ user: userId }).populate("user", ["name", "avatar"], "User");
+        if (!profile) {
+            res.status(400).json({
+                msg: "Cannot find profile",
+            });
+        }
+        res.status(200).json({
+            profile,
+        });
+    }
+    catch (error) {
+        console.log(error.message);
+        if (error.kind === "ObjectId") {
+            res.status(400).json({
+                msg: "Cannot find profile",
+            });
+        }
+        res.status(500).json({
+            msg: "Server Error",
         });
     }
 });

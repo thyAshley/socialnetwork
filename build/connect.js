@@ -19,6 +19,7 @@ const connectDB = () => __awaiter(void 0, void 0, void 0, function* () {
             useNewUrlParser: true,
             useUnifiedTopology: true,
             useCreateIndex: true,
+            useFindAndModify: false,
         });
         console.log("Sucessfully connected to to mongoDB");
     }
