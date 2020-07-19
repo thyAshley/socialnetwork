@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.postLogin = exports.checkJWT = exports.getAuth = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
+const express_validator_1 = require("express-validator");
 const User_1 = __importDefault(require("../models/User"));
 exports.getAuth = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -49,31 +50,39 @@ exports.checkJWT = (req, res, next) => {
     }
 };
 exports.postLogin = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const error = express_validator_1.validationResult(req);
+    if (!error.isEmpty()) {
+        return res.status(400).json({
+            error,
+        });
+    }
     const { email, password } = req.body;
     try {
         const user = yield User_1.default.findOne({ email });
         if (!user) {
             return res.status(401).json({
-                msg: "Login Fail, Invalid Email or Password",
+                msg: "Login Fail, Invalid Credentials",
             });
         }
         const isAuth = yield bcryptjs_1.default.compare(password, user.password);
+        if (!isAuth) {
+            return res.status(401).json({
+                msg: "Login Fail, Invalid Credentials",
+            });
+        }
         const payload = {
             user: {
                 id: user._id,
             },
         };
-        if (isAuth) {
-            const token = jsonwebtoken_1.default.sign(payload, process.env.JWT_SECRET);
+        jsonwebtoken_1.default.sign(payload, process.env.JWT_SECRET, { expiresIn: 3600 }, (err, token) => {
+            if (err)
+                throw err;
             return res.status(200).json({
+                msg: "Login successful",
                 token,
             });
-        }
-        else {
-            return res.status(500).json({
-                msg: "Login Fail, Invalid Email or Password",
-            });
-        }
+        });
     }
     catch (err) {
         res.status(500).json({

@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
+import { validationResult } from "express-validator";
 
 import User from "../models/User";
 
@@ -45,32 +46,49 @@ export const postLogin = async (
   res: Response,
   next: NextFunction
 ) => {
+  const error = validationResult(req);
+  if (!error.isEmpty()) {
+    return res.status(400).json({
+      error,
+    });
+  }
+
   const { email, password } = req.body;
   try {
     const user = await User.findOne({ email });
+
     if (!user) {
       return res.status(401).json({
-        msg: "Login Fail, Invalid Email or Password",
+        msg: "Login Fail, Invalid Credentials",
       });
     }
 
     const isAuth = await bcrypt.compare(password, user!.password);
+
+    if (!isAuth) {
+      return res.status(401).json({
+        msg: "Login Fail, Invalid Credentials",
+      });
+    }
 
     const payload = {
       user: {
         id: user!._id,
       },
     };
-    if (isAuth) {
-      const token = jwt.sign(payload, process.env.JWT_SECRET as string);
-      return res.status(200).json({
-        token,
-      });
-    } else {
-      return res.status(500).json({
-        msg: "Login Fail, Invalid Email or Password",
-      });
-    }
+
+    jwt.sign(
+      payload,
+      process.env.JWT_SECRET as string,
+      { expiresIn: 3600 },
+      (err, token) => {
+        if (err) throw err;
+        return res.status(200).json({
+          msg: "Login successful",
+          token,
+        });
+      }
+    );
   } catch (err) {
     res.status(500).json({
       msg: "Unable to login, please try again",

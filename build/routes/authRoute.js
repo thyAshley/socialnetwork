@@ -20,6 +20,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
+const express_validator_1 = require("express-validator");
 const authController = __importStar(require("../controller/authController"));
 const router = express_1.Router();
 // @route   GET api/auth
@@ -29,5 +30,8 @@ router.get("/", authController.checkJWT, authController.getAuth);
 // @route   POST api/login
 // @desc    Login in the user
 // @access  Public
-router.post("/login", authController.postLogin);
+router.post("/login", [
+    express_validator_1.body("email", "email is required").isEmail(),
+    express_validator_1.body("password", "password is required").not().notEmpty(),
+], authController.postLogin);
 exports.default = router;

@@ -63,6 +63,7 @@ export const getUser = async (
       (err, token) => {
         if (err) throw err;
         return res.status(201).json({
+          msg: "Sign up successful",
           token,
         });
       }

@@ -54,6 +54,7 @@ exports.getUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function
             if (err)
                 throw err;
             return res.status(201).json({
+                msg: "Sign up successful",
                 token,
             });
         });

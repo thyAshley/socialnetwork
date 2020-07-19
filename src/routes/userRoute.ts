@@ -6,11 +6,11 @@ import { body } from "express-validator";
 
 const router = Router();
 
-// @route   POST api/user
+// @route   POST api/user/signup
 // @desc    Register user
 // @access  Public
 router.post(
-  "/",
+  "/signup",
   [
     body("name", "Name is required").not().isEmpty().trim().escape(),
     body("email", "Please include a valid email").isEmail().normalizeEmail(),

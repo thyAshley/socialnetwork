@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { body } from "express-validator";
 
 import * as authController from "../controller/authController";
 
@@ -22,6 +23,13 @@ router.get("/", authController.checkJWT, authController.getAuth);
 // @route   POST api/login
 // @desc    Login in the user
 // @access  Public
-router.post("/login", authController.postLogin);
+router.post(
+  "/login",
+  [
+    body("email", "email is required").isEmail(),
+    body("password", "password is required").not().notEmpty(),
+  ],
+  authController.postLogin
+);
 
 export default router;

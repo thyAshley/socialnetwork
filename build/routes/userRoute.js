@@ -23,10 +23,10 @@ const express_1 = require("express");
 const userController = __importStar(require("../controller/userController"));
 const express_validator_1 = require("express-validator");
 const router = express_1.Router();
-// @route   POST api/user
+// @route   POST api/user/signup
 // @desc    Register user
 // @access  Public
-router.post("/", [
+router.post("/signup", [
     express_validator_1.body("name", "Name is required").not().isEmpty().trim().escape(),
     express_validator_1.body("email", "Please include a valid email").isEmail().normalizeEmail(),
     express_validator_1.body("password", "Please enter a password with 6 or more characters").isLength({ min: 6 }),
