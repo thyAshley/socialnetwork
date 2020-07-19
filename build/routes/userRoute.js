@@ -21,9 +21,14 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const userController = __importStar(require("../controller/userController"));
+const express_validator_1 = require("express-validator");
 const router = express_1.Router();
 // @route   GET api/user
-// @desc    Test Route
+// @desc    Register user
 // @access  Public
-router.get("/", userController.getUser);
+router.post("/", [
+    express_validator_1.check("name", "Name is required").not().isEmpty(),
+    express_validator_1.check("email", "Please include a valid email").isEmail(),
+    express_validator_1.check("password", "Please enter a password with 6 or more characters").isLength({ min: 6 }),
+], userController.getUser);
 exports.default = router;

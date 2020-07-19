@@ -11,11 +11,16 @@ const userRoute_1 = __importDefault(require("./routes/userRoute"));
 const authRoute_1 = __importDefault(require("./routes/authRoute"));
 const postsRoute_1 = __importDefault(require("./routes/postsRoute"));
 const profileRoute_1 = __importDefault(require("./routes/profileRoute"));
+// initialisation
 const app = express_1.default();
 const PORT = process.env.PORT || 3000;
+// Middlewares
+app.use(express_1.default.urlencoded({ extended: true }));
+app.use(express_1.default.json());
 app.get("/", (req, res, next) => {
     res.send("API Running");
 });
+// Routes
 app.use("/user", userRoute_1.default);
 app.use("/auth", authRoute_1.default);
 app.use("/posts", postsRoute_1.default);
