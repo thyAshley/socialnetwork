@@ -28,7 +28,7 @@ const router = express_1.Router();
 // @access  Public
 router.get("/", authController.checkJWT, authController.getAuth);
 // @route   POST api/login
-// @desc    Login in the user
+// @desc    Login the user in and issue a token
 // @access  Public
 router.post("/login", [
     express_validator_1.body("email", "email is required").isEmail(),

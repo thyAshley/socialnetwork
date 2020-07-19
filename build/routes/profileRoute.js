@@ -21,9 +21,10 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const profileController = __importStar(require("../controller/profileController"));
+const authController = __importStar(require("../controller/authController"));
 const router = express_1.Router();
-// @route   api/profile
-// @desc    Test route
-// @access  Public
-router.get("/", profileController.getProfile);
+// @route   GET api/profile/me
+// @desc    Get current users profile
+// @access  Private
+router.get("/me", authController.checkJWT, profileController.getProfile);
 exports.default = router;

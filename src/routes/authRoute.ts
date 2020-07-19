@@ -21,7 +21,7 @@ const router = Router();
 router.get("/", authController.checkJWT, authController.getAuth);
 
 // @route   POST api/login
-// @desc    Login in the user
+// @desc    Login the user in and issue a token
 // @access  Public
 router.post(
   "/login",
