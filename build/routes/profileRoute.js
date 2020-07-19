@@ -38,6 +38,10 @@ router.post("/", [
 ], profileController.postProfile);
 // @route   GET api/profile
 // @desc    Get all users profile
-// @access  Private
+// @access  Public
 router.get("/", profileController.getProfiles);
+// @route   GET api/profile/user/:userId
+// @desc    Get users profile
+// @access  Public
+router.get("/user/:userId", profileController.getUserProfile);
 exports.default = router;

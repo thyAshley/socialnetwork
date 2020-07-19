@@ -122,11 +122,45 @@ export const getProfiles = async (
       ["name", "avatar"],
       "User"
     );
+    res.status(200).json(profiles);
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({
+      msg: "Server Error",
+    });
+  }
+};
+
+// @route   GET api/profile/user/:userId
+// @desc    Get users profile
+// @access  Public
+export const getUserProfile = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const userId = req.params.userId;
+  try {
+    const profile = await Profile.findOne({ user: userId }).populate(
+      "user",
+      ["name", "avatar"],
+      "User"
+    );
+    if (!profile) {
+      res.status(400).json({
+        msg: "Cannot find profile",
+      });
+    }
     res.status(200).json({
-      profiles,
+      profile,
     });
   } catch (error) {
     console.log(error.message);
+    if (error.kind === "ObjectId") {
+      res.status(400).json({
+        msg: "Cannot find profile",
+      });
+    }
     res.status(500).json({
       msg: "Server Error",
     });

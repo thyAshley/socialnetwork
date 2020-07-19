@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getProfiles = exports.postProfile = exports.getProfile = void 0;
+exports.getUserProfile = exports.getProfiles = exports.postProfile = exports.getProfile = void 0;
 const express_validator_1 = require("express-validator");
 const Profile_1 = __importDefault(require("../models/Profile"));
 // @route   GET api/profile/me
@@ -89,12 +89,38 @@ exports.postProfile = (req, res, next) => __awaiter(void 0, void 0, void 0, func
 exports.getProfiles = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const profiles = yield Profile_1.default.find().populate("user", ["name", "avatar"], "User");
+        res.status(200).json(profiles);
+    }
+    catch (error) {
+        console.log(error.message);
+        res.status(500).json({
+            msg: "Server Error",
+        });
+    }
+});
+// @route   GET api/profile/user/:userId
+// @desc    Get users profile
+// @access  Public
+exports.getUserProfile = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const userId = req.params.userId;
+    try {
+        const profile = yield Profile_1.default.findOne({ user: userId }).populate("user", ["name", "avatar"], "User");
+        if (!profile) {
+            res.status(400).json({
+                msg: "Cannot find profile",
+            });
+        }
         res.status(200).json({
-            profiles,
+            profile,
         });
     }
     catch (error) {
         console.log(error.message);
+        if (error.kind === "ObjectId") {
+            res.status(400).json({
+                msg: "Cannot find profile",
+            });
+        }
         res.status(500).json({
             msg: "Server Error",
         });
