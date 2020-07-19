@@ -45,7 +45,6 @@ exports.checkJWT = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
     try {
         const decode = jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET);
         req.user = decode.user;
-        console.log(req.user);
         const user = yield User_1.default.findById(req.user.id);
         if (!user) {
             return res.status(401).json({

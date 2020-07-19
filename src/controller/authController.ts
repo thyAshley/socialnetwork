@@ -41,7 +41,6 @@ export const checkJWT = async (
   try {
     const decode = <any>jwt.verify(token, process.env.JWT_SECRET as string);
     req.user = decode.user;
-    console.log(req.user);
     const user = await User.findById(req.user.id);
     if (!user) {
       return res.status(401).json({
