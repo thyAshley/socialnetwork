@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { validationResult } from "express-validator";
+import axios from "axios";
 
 import Profile, { IProfileSchema } from "../models/Profile";
 import User from "../models/User";
@@ -302,5 +303,33 @@ export const delEducation = async (
   } catch (error) {
     console.log(error);
     res.json(error);
+  }
+};
+
+// @route   GET api/profile/github/username
+// @desc    Get user repos from Github
+// @access  Public
+export const getGithub = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const response = await axios.get(
+      `https://api.github.com/users/${req.params.username}/repos?per_page=5&sort=created:asc&client_id=${process.env.GITHUB_ID}&client_secret=${process.env.GITHUB_SECRET}`
+    );
+
+    return res.status(200).json({
+      response: response.data,
+    });
+  } catch (error) {
+    if (error.response.status === 404) {
+      return res.status(404).json({
+        response: "No github user found",
+      });
+    }
+    return res.status(500).json({
+      msg: "Server Error",
+    });
   }
 };
