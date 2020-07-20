@@ -20,10 +20,12 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
+const express_validator_1 = require("express-validator");
 const postsController = __importStar(require("../controller/postsController"));
+const authController = __importStar(require("../controller/authController"));
 const router = express_1.Router();
-// @route   api/posts
-// @desc    Test route
-// @access  Public
-router.get("/", postsController.getPosts);
+// @route POST api/posts
+// @desc Create a post
+// @access Private
+router.post("/", [authController.checkJWT, express_validator_1.check("text", "Text must not be empty").notEmpty()], postsController.postNewPost);
 exports.default = router;
