@@ -12,8 +12,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.delEducation = exports.putEducation = exports.delExperience = exports.putExperience = exports.getUserProfile = exports.getProfiles = exports.postProfile = exports.getProfile = void 0;
+exports.getGithub = exports.delEducation = exports.putEducation = exports.delExperience = exports.putExperience = exports.getUserProfile = exports.getProfiles = exports.postProfile = exports.getProfile = void 0;
 const express_validator_1 = require("express-validator");
+const axios_1 = __importDefault(require("axios"));
 const Profile_1 = __importDefault(require("../models/Profile"));
 // @route   GET api/profile/me
 // @desc    Get current users profile
@@ -232,5 +233,26 @@ exports.delEducation = (req, res, next) => __awaiter(void 0, void 0, void 0, fun
     catch (error) {
         console.log(error);
         res.json(error);
+    }
+});
+// @route   GET api/profile/github/username
+// @desc    Get user repos from Github
+// @access  Public
+exports.getGithub = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const response = yield axios_1.default.get(`https://api.github.com/users/${req.params.username}/repos?per_page=5&sort=created:asc&client_id=${process.env.GITHUB_ID}&client_secret=${process.env.GITHUB_SECRET}`);
+        return res.status(200).json({
+            response: response.data,
+        });
+    }
+    catch (error) {
+        if (error.response.status === 404) {
+            return res.status(404).json({
+                response: "No github user found",
+            });
+        }
+        return res.status(500).json({
+            msg: "Server Error",
+        });
     }
 });
