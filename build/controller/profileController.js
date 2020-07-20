@@ -223,10 +223,8 @@ exports.delEducation = (req, res, next) => __awaiter(void 0, void 0, void 0, fun
         }
         const newEducation = profile === null || profile === void 0 ? void 0 : profile.education.filter((edu) => {
             var _a;
-            console.log(edu._id, eduId);
             return ((_a = edu._id) === null || _a === void 0 ? void 0 : _a.toString()) !== eduId;
         });
-        console.log(newEducation);
         profile.education = newEducation;
         yield (profile === null || profile === void 0 ? void 0 : profile.save());
         res.status(200).json(profile);

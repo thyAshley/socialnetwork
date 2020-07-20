@@ -293,11 +293,9 @@ export const delEducation = async (
       });
     }
     const newEducation = profile?.education.filter((edu) => {
-      console.log(edu._id, eduId);
       return edu._id?.toString() !== eduId;
     }) as IProfileSchema["education"];
 
-    console.log(newEducation);
     profile!.education = newEducation;
     await profile?.save();
     res.status(200).json(profile);
