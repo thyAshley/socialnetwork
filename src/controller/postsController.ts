@@ -2,7 +2,8 @@ import { Request, Response, NextFunction } from "express";
 import { validationResult } from "express-validator";
 import User from "../models/User";
 import Profile from "../models/Profile";
-import Posts from "../models/Posts";
+import Posts, { IPostSchema } from "../models/Posts";
+import mongoose from "mongoose";
 
 // @route POST api/posts
 // @desc Create a post
@@ -82,5 +83,69 @@ export const deletePostById = async (
     res.status(500).json({
       msg: "Server Error",
     });
+  }
+};
+
+// @route PUT api/posts/like/:id
+// @desc like a post
+// @access Private
+export const postLikebyId = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const post = await Posts.findById({ _id: req.params.id });
+
+    if (
+      post?.likes?.filter((like) => like.user?.toString() === req.user.id)
+        .length! > 0
+    ) {
+      return res.status(400).json({
+        msg: "You already liked this post",
+      });
+    }
+    post?.likes?.unshift({ user: req.user.id });
+    await post?.save();
+    return res.status(200).json({
+      likes: [post!.likes],
+    });
+  } catch (error) {
+    console.error(error.message);
+    return res.status(500).send("Server Error");
+  }
+};
+
+// @route PUT api/posts/unlike/:id
+// @desc unlike a post
+// @access Private
+export const postUnlikebyId = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const post = await Posts.findById({ _id: req.params.id });
+
+    if (
+      post?.likes?.filter((like) => like.user?.toString() === req.user.id)
+        .length! === 0
+    ) {
+      return res.status(400).json({
+        msg: "You have not liked this post",
+      });
+    }
+    const removeIdx: number = post
+      ?.likes!?.map((like) => like.user?.toString())
+      .indexOf(req.user.id);
+    console.log(removeIdx);
+    post?.likes?.splice(removeIdx, 1);
+    await post?.save();
+    return res.status(200).json({
+      likes: [post!.likes],
+    });
+  } catch (error) {
+    console.error(error.message);
+    return res.status(500).send("Server Error");
   }
 };

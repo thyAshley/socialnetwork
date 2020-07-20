@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deletePostById = exports.getAllPost = exports.postNewPost = void 0;
+exports.postUnlikebyId = exports.postLikebyId = exports.deletePostById = exports.getAllPost = exports.postNewPost = void 0;
 const express_validator_1 = require("express-validator");
 const User_1 = __importDefault(require("../models/User"));
 const Posts_1 = __importDefault(require("../models/Posts"));
@@ -81,5 +81,53 @@ exports.deletePostById = (req, res, next) => __awaiter(void 0, void 0, void 0, f
         res.status(500).json({
             msg: "Server Error",
         });
+    }
+});
+// @route PUT api/posts/like/:id
+// @desc like a post
+// @access Private
+exports.postLikebyId = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a, _b;
+    try {
+        const post = yield Posts_1.default.findById({ _id: req.params.id });
+        if (((_a = post === null || post === void 0 ? void 0 : post.likes) === null || _a === void 0 ? void 0 : _a.filter((like) => { var _a; return ((_a = like.user) === null || _a === void 0 ? void 0 : _a.toString()) === req.user.id; }).length) > 0) {
+            return res.status(400).json({
+                msg: "You already liked this post",
+            });
+        }
+        (_b = post === null || post === void 0 ? void 0 : post.likes) === null || _b === void 0 ? void 0 : _b.unshift({ user: req.user.id });
+        yield (post === null || post === void 0 ? void 0 : post.save());
+        return res.status(200).json({
+            likes: [post.likes],
+        });
+    }
+    catch (error) {
+        console.error(error.message);
+        return res.status(500).send("Server Error");
+    }
+});
+// @route PUT api/posts/unlike/:id
+// @desc unlike a post
+// @access Private
+exports.postUnlikebyId = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    var _c, _d, _e;
+    try {
+        const post = yield Posts_1.default.findById({ _id: req.params.id });
+        if (((_c = post === null || post === void 0 ? void 0 : post.likes) === null || _c === void 0 ? void 0 : _c.filter((like) => { var _a; return ((_a = like.user) === null || _a === void 0 ? void 0 : _a.toString()) === req.user.id; }).length) === 0) {
+            return res.status(400).json({
+                msg: "You have not liked this post",
+            });
+        }
+        const removeIdx = (_d = post === null || post === void 0 ? void 0 : post.likes) === null || _d === void 0 ? void 0 : _d.map((like) => { var _a; return (_a = like.user) === null || _a === void 0 ? void 0 : _a.toString(); }).indexOf(req.user.id);
+        console.log(removeIdx);
+        (_e = post === null || post === void 0 ? void 0 : post.likes) === null || _e === void 0 ? void 0 : _e.splice(removeIdx, 1);
+        yield (post === null || post === void 0 ? void 0 : post.save());
+        return res.status(200).json({
+            likes: [post.likes],
+        });
+    }
+    catch (error) {
+        console.error(error.message);
+        return res.status(500).send("Server Error");
     }
 });

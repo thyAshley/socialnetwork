@@ -7,7 +7,7 @@ export interface IPostSchema extends Document {
   avatar?: string;
   likes?: [
     {
-      user?: mongoose.Schema.Types.ObjectId;
+      user?: string;
     }
   ];
   comment?: [
