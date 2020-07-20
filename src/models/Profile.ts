@@ -24,6 +24,7 @@ export interface IProfileSchema extends mongoose.Document {
   ];
   education: [
     {
+      _id?: string;
       school: string;
       degree: string;
       fieldofstudy: string;

@@ -72,4 +72,13 @@ router.put(
   profileController.putEducation
 );
 
+// @route   DEL api/profile/education/:eduId
+// @desc    Delete profile education by id
+// @access  Private
+router.delete(
+  "/education/:eduId",
+  authController.checkJWT,
+  profileController.delEducation
+);
+
 export default router;

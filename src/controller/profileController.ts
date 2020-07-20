@@ -237,6 +237,9 @@ export const delExperience = async (
   }
 };
 
+// @route   put api/profile/education
+// @desc    Add profile education
+// @access  Private
 export const putEducation = async (
   req: Request,
   res: Response,
@@ -266,10 +269,40 @@ export const putEducation = async (
     const profile = await Profile.findOne({ user: req.user.id });
     profile?.education.unshift(education);
     await profile?.save();
-
     res.status(200).json(profile);
   } catch (err) {
     console.log(err.message);
     res.status(500).send("Server Error");
+  }
+};
+
+// @route   DEL api/profile/education/:eduId
+// @desc    Delete profile education by id
+// @access  Private
+export const delEducation = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const eduId = req.params.eduId;
+  try {
+    const profile = await Profile.findOne({ user: req.user.id });
+    if (!profile) {
+      res.status(400).json({
+        msg: "Profile not found",
+      });
+    }
+    const newEducation = profile?.education.filter((edu) => {
+      console.log(edu._id, eduId);
+      return edu._id?.toString() !== eduId;
+    }) as IProfileSchema["education"];
+
+    console.log(newEducation);
+    profile!.education = newEducation;
+    await profile?.save();
+    res.status(200).json(profile);
+  } catch (error) {
+    console.log(error);
+    res.json(error);
   }
 };

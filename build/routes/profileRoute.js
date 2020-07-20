@@ -67,4 +67,8 @@ router.put("/education", [
     express_validator_1.body("fieldofstudy", "Field of study is required").notEmpty(),
     express_validator_1.body("from", "From date is required").notEmpty(),
 ], profileController.putEducation);
+// @route   DEL api/profile/education/:eduId
+// @desc    Delete profile education by id
+// @access  Private
+router.delete("/education/:eduId", authController.checkJWT, profileController.delEducation);
 exports.default = router;
