@@ -12,6 +12,7 @@ export interface IProfileSchema extends mongoose.Document {
   githubusername: string;
   experience: [
     {
+      _id?: string;
       title: string;
       company: string;
       location: string;
@@ -72,6 +73,9 @@ const profileSchema = new mongoose.Schema({
   },
   experience: [
     {
+      id: {
+        type: String,
+      },
       title: {
         type: String,
         required: true,

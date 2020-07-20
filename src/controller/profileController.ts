@@ -207,3 +207,32 @@ export const putExperience = async (
     });
   }
 };
+
+// @route   DEL api/profile/experience/:expId
+// @desc    Delete profile experience by id
+// @access  Private
+export const delExperience = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const expId = req.params.expId;
+  try {
+    const profile = await Profile.findOne({ user: req.user.id });
+    if (!profile) {
+      res.status(400).json({
+        msg: "Profile not found",
+      });
+    }
+    const newexperience = profile?.experience.filter((exp) => {
+      return exp._id?.toString() !== expId;
+    }) as IProfileSchema["experience"];
+
+    profile!.experience = newexperience;
+    await profile?.save();
+    res.status(200).json(profile);
+  } catch (error) {
+    console.log(error);
+    res.json(error);
+  }
+};

@@ -48,4 +48,12 @@ router.put(
   profileController.putExperience
 );
 
+// @route   DEL api/profile/experience/:expId
+// @desc    Delete profile experience by id
+// @access  Private
+router.delete(
+  "/experience/:expId",
+  authController.checkJWT,
+  profileController.delExperience
+);
 export default router;

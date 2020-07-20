@@ -53,4 +53,8 @@ router.put("/experience", [
     express_validator_1.body("company", "Company is required").not().isEmpty(),
     express_validator_1.body("from", "From Date is required").not().isEmpty(),
 ], profileController.putExperience);
+// @route   DEL api/profile/experience/:expId
+// @desc    Delete profile experience by id
+// @access  Private
+router.delete("/experience/:expId", authController.checkJWT, profileController.delExperience);
 exports.default = router;
