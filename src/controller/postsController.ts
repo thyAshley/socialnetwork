@@ -44,7 +44,7 @@ export const getAllPost = async (
   next: NextFunction
 ) => {
   try {
-    const posts = await Posts.find();
+    const posts = await Posts.find().sort({ date: -1 });
     res.status(200).json(posts);
   } catch (err) {
     console.log(err);
@@ -64,17 +64,11 @@ export const deletePostById = async (
   const userId = req.user.id;
 
   try {
-    let post = await Posts.findOne({ _id: postId });
+    let post = await Posts.findById({ postId });
 
-    if (!post) {
+    if (post?.user!.toString() !== userId) {
       return res.status(400).json({
-        msg: "Post does not exist",
-      });
-    }
-    console.log(userId, post.user);
-    if (post.user!.toString() !== userId) {
-      return res.status(400).json({
-        msg: "You cannot delete this post",
+        msg: "You are not authorized to delete this post",
       });
     }
     await post.remove();
@@ -82,6 +76,9 @@ export const deletePostById = async (
       msg: "Successfully deleted post",
     });
   } catch (error) {
+    if (error.kind === "ObjectId") {
+      return res.status(404).json({ msg: "Post not found" });
+    }
     res.status(500).json({
       msg: "Server Error",
     });

@@ -48,7 +48,7 @@ exports.postNewPost = (req, res, next) => __awaiter(void 0, void 0, void 0, func
 // @access Publiuc
 exports.getAllPost = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const posts = yield Posts_1.default.find();
+        const posts = yield Posts_1.default.find().sort({ date: -1 });
         res.status(200).json(posts);
     }
     catch (err) {
@@ -63,16 +63,10 @@ exports.deletePostById = (req, res, next) => __awaiter(void 0, void 0, void 0, f
     const postId = req.params.postId;
     const userId = req.user.id;
     try {
-        let post = yield Posts_1.default.findOne({ _id: postId });
-        if (!post) {
+        let post = yield Posts_1.default.findById({ postId });
+        if ((post === null || post === void 0 ? void 0 : post.user.toString()) !== userId) {
             return res.status(400).json({
-                msg: "Post does not exist",
-            });
-        }
-        console.log(userId, post.user);
-        if (post.user.toString() !== userId) {
-            return res.status(400).json({
-                msg: "You cannot delete this post",
+                msg: "You are not authorized to delete this post",
             });
         }
         yield post.remove();
@@ -81,6 +75,9 @@ exports.deletePostById = (req, res, next) => __awaiter(void 0, void 0, void 0, f
         });
     }
     catch (error) {
+        if (error.kind === "ObjectId") {
+            return res.status(404).json({ msg: "Post not found" });
+        }
         res.status(500).json({
             msg: "Server Error",
         });
