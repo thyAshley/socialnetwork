@@ -57,4 +57,14 @@ router.put("/experience", [
 // @desc    Delete profile experience by id
 // @access  Private
 router.delete("/experience/:expId", authController.checkJWT, profileController.delExperience);
+// @route   put api/profile/education
+// @desc    Add profile education
+// @access  Private
+router.put("/education", [
+    authController.checkJWT,
+    express_validator_1.body("school", "school is rqeuired").notEmpty(),
+    express_validator_1.body("degree", "Degree is required").notEmpty(),
+    express_validator_1.body("fieldofstudy", "Field of study is required").notEmpty(),
+    express_validator_1.body("from", "From date is required").notEmpty(),
+], profileController.putEducation);
 exports.default = router;

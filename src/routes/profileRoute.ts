@@ -56,4 +56,20 @@ router.delete(
   authController.checkJWT,
   profileController.delExperience
 );
+
+// @route   put api/profile/education
+// @desc    Add profile education
+// @access  Private
+router.put(
+  "/education",
+  [
+    authController.checkJWT,
+    body("school", "school is rqeuired").notEmpty(),
+    body("degree", "Degree is required").notEmpty(),
+    body("fieldofstudy", "Field of study is required").notEmpty(),
+    body("from", "From date is required").notEmpty(),
+  ],
+  profileController.putEducation
+);
+
 export default router;

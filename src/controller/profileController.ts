@@ -236,3 +236,40 @@ export const delExperience = async (
     res.json(error);
   }
 };
+
+export const putEducation = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const {
+    school,
+    degree,
+    fieldofstudy,
+    from,
+    to,
+    current,
+    description,
+  } = req.body;
+
+  const education = {
+    school,
+    degree,
+    fieldofstudy,
+    from,
+    to,
+    current,
+    description,
+  };
+
+  try {
+    const profile = await Profile.findOne({ user: req.user.id });
+    profile?.education.unshift(education);
+    await profile?.save();
+
+    res.status(200).json(profile);
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).send("Server Error");
+  }
+};

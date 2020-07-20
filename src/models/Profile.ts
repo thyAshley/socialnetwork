@@ -28,9 +28,9 @@ export interface IProfileSchema extends mongoose.Document {
       degree: string;
       fieldofstudy: string;
       from: Date;
-      to: Date;
-      current: Boolean;
-      description: string;
+      to?: Date;
+      current?: Boolean;
+      description?: string;
     }
   ];
   social: {
