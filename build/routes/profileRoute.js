@@ -44,4 +44,13 @@ router.get("/", profileController.getProfiles);
 // @desc    Get users profile
 // @access  Public
 router.get("/user/:userId", profileController.getUserProfile);
+// @route   PUT api/profile/experience
+// @desc    Add profile experience
+// @access  Private
+router.put("/experience", [
+    authController.checkJWT,
+    express_validator_1.body("title", "Title is required").not().isEmpty(),
+    express_validator_1.body("company", "Company is required").not().isEmpty(),
+    express_validator_1.body("from", "From Date is required").not().isEmpty(),
+], profileController.putExperience);
 exports.default = router;

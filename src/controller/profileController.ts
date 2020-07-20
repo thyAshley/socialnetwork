@@ -166,3 +166,44 @@ export const getUserProfile = async (
     });
   }
 };
+
+// @route   PUT api/profile/experience
+// @desc    Add profile experience
+// @access  Private
+export const putExperience = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    res.status(400).json({
+      error: errors,
+    });
+  }
+  const { title, company, location, from, to, current, description } = req.body;
+
+  const experience = {
+    title,
+    company,
+    location,
+    from,
+    to,
+    current,
+    description,
+  };
+  try {
+    const profile = await Profile.findOne({ user: req.user.id });
+
+    profile?.experience.unshift(experience);
+
+    await profile?.save();
+
+    res.status(200).json(profile);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({
+      error,
+    });
+  }
+};

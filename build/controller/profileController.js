@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getUserProfile = exports.getProfiles = exports.postProfile = exports.getProfile = void 0;
+exports.putExperience = exports.getUserProfile = exports.getProfiles = exports.postProfile = exports.getProfile = void 0;
 const express_validator_1 = require("express-validator");
 const Profile_1 = __importDefault(require("../models/Profile"));
 // @route   GET api/profile/me
@@ -123,6 +123,39 @@ exports.getUserProfile = (req, res, next) => __awaiter(void 0, void 0, void 0, f
         }
         res.status(500).json({
             msg: "Server Error",
+        });
+    }
+});
+// @route   PUT api/profile/experience
+// @desc    Add profile experience
+// @access  Private
+exports.putExperience = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const errors = express_validator_1.validationResult(req);
+    if (!errors.isEmpty()) {
+        res.status(400).json({
+            error: errors,
+        });
+    }
+    const { title, company, location, from, to, current, description } = req.body;
+    const experience = {
+        title,
+        company,
+        location,
+        from,
+        to,
+        current,
+        description,
+    };
+    try {
+        const profile = yield Profile_1.default.findOne({ user: req.user.id });
+        profile === null || profile === void 0 ? void 0 : profile.experience.unshift(experience);
+        yield (profile === null || profile === void 0 ? void 0 : profile.save());
+        res.status(200).json(profile);
+    }
+    catch (error) {
+        console.error(error.message);
+        res.status(500).json({
+            error,
         });
     }
 });
