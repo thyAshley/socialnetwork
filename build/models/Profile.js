@@ -34,6 +34,9 @@ const profileSchema = new mongoose_1.default.Schema({
     },
     experience: [
         {
+            id: {
+                type: String,
+            },
             title: {
                 type: String,
                 required: true,

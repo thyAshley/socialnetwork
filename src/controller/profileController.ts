@@ -166,3 +166,141 @@ export const getUserProfile = async (
     });
   }
 };
+
+// @route   PUT api/profile/experience
+// @desc    Add profile experience
+// @access  Private
+export const putExperience = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    res.status(400).json({
+      error: errors,
+    });
+  }
+  const { title, company, location, from, to, current, description } = req.body;
+
+  const experience = {
+    title,
+    company,
+    location,
+    from,
+    to,
+    current,
+    description,
+  };
+  try {
+    const profile = await Profile.findOne({ user: req.user.id });
+
+    profile?.experience.unshift(experience);
+
+    await profile?.save();
+
+    res.status(200).json(profile);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({
+      error,
+    });
+  }
+};
+
+// @route   DEL api/profile/experience/:expId
+// @desc    Delete profile experience by id
+// @access  Private
+export const delExperience = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const expId = req.params.expId;
+  try {
+    const profile = await Profile.findOne({ user: req.user.id });
+    if (!profile) {
+      res.status(400).json({
+        msg: "Profile not found",
+      });
+    }
+    const newexperience = profile?.experience.filter((exp) => {
+      return exp._id?.toString() !== expId;
+    }) as IProfileSchema["experience"];
+
+    profile!.experience = newexperience;
+    await profile?.save();
+    res.status(200).json(profile);
+  } catch (error) {
+    console.log(error);
+    res.json(error);
+  }
+};
+
+// @route   put api/profile/education
+// @desc    Add profile education
+// @access  Private
+export const putEducation = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const {
+    school,
+    degree,
+    fieldofstudy,
+    from,
+    to,
+    current,
+    description,
+  } = req.body;
+
+  const education = {
+    school,
+    degree,
+    fieldofstudy,
+    from,
+    to,
+    current,
+    description,
+  };
+
+  try {
+    const profile = await Profile.findOne({ user: req.user.id });
+    profile?.education.unshift(education);
+    await profile?.save();
+    res.status(200).json(profile);
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).send("Server Error");
+  }
+};
+
+// @route   DEL api/profile/education/:eduId
+// @desc    Delete profile education by id
+// @access  Private
+export const delEducation = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const eduId = req.params.eduId;
+  try {
+    const profile = await Profile.findOne({ user: req.user.id });
+    if (!profile) {
+      res.status(400).json({
+        msg: "Profile not found",
+      });
+    }
+    const newEducation = profile?.education.filter((edu) => {
+      return edu._id?.toString() !== eduId;
+    }) as IProfileSchema["education"];
+
+    profile!.education = newEducation;
+    await profile?.save();
+    res.status(200).json(profile);
+  } catch (error) {
+    console.log(error);
+    res.json(error);
+  }
+};

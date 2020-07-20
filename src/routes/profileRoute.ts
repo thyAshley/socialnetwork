@@ -34,4 +34,51 @@ router.get("/", profileController.getProfiles);
 // @access  Public
 router.get("/user/:userId", profileController.getUserProfile);
 
+// @route   PUT api/profile/experience
+// @desc    Add profile experience
+// @access  Private
+router.put(
+  "/experience",
+  [
+    authController.checkJWT,
+    body("title", "Title is required").not().isEmpty(),
+    body("company", "Company is required").not().isEmpty(),
+    body("from", "From Date is required").not().isEmpty(),
+  ],
+  profileController.putExperience
+);
+
+// @route   DEL api/profile/experience/:expId
+// @desc    Delete profile experience by id
+// @access  Private
+router.delete(
+  "/experience/:expId",
+  authController.checkJWT,
+  profileController.delExperience
+);
+
+// @route   put api/profile/education
+// @desc    Add profile education
+// @access  Private
+router.put(
+  "/education",
+  [
+    authController.checkJWT,
+    body("school", "school is rqeuired").notEmpty(),
+    body("degree", "Degree is required").notEmpty(),
+    body("fieldofstudy", "Field of study is required").notEmpty(),
+    body("from", "From date is required").notEmpty(),
+  ],
+  profileController.putEducation
+);
+
+// @route   DEL api/profile/education/:eduId
+// @desc    Delete profile education by id
+// @access  Private
+router.delete(
+  "/education/:eduId",
+  authController.checkJWT,
+  profileController.delEducation
+);
+
 export default router;

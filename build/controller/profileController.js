@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getUserProfile = exports.getProfiles = exports.postProfile = exports.getProfile = void 0;
+exports.delEducation = exports.putEducation = exports.delExperience = exports.putExperience = exports.getUserProfile = exports.getProfiles = exports.postProfile = exports.getProfile = void 0;
 const express_validator_1 = require("express-validator");
 const Profile_1 = __importDefault(require("../models/Profile"));
 // @route   GET api/profile/me
@@ -124,5 +124,113 @@ exports.getUserProfile = (req, res, next) => __awaiter(void 0, void 0, void 0, f
         res.status(500).json({
             msg: "Server Error",
         });
+    }
+});
+// @route   PUT api/profile/experience
+// @desc    Add profile experience
+// @access  Private
+exports.putExperience = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const errors = express_validator_1.validationResult(req);
+    if (!errors.isEmpty()) {
+        res.status(400).json({
+            error: errors,
+        });
+    }
+    const { title, company, location, from, to, current, description } = req.body;
+    const experience = {
+        title,
+        company,
+        location,
+        from,
+        to,
+        current,
+        description,
+    };
+    try {
+        const profile = yield Profile_1.default.findOne({ user: req.user.id });
+        profile === null || profile === void 0 ? void 0 : profile.experience.unshift(experience);
+        yield (profile === null || profile === void 0 ? void 0 : profile.save());
+        res.status(200).json(profile);
+    }
+    catch (error) {
+        console.error(error.message);
+        res.status(500).json({
+            error,
+        });
+    }
+});
+// @route   DEL api/profile/experience/:expId
+// @desc    Delete profile experience by id
+// @access  Private
+exports.delExperience = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const expId = req.params.expId;
+    try {
+        const profile = yield Profile_1.default.findOne({ user: req.user.id });
+        if (!profile) {
+            res.status(400).json({
+                msg: "Profile not found",
+            });
+        }
+        const newexperience = profile === null || profile === void 0 ? void 0 : profile.experience.filter((exp) => {
+            var _a;
+            return ((_a = exp._id) === null || _a === void 0 ? void 0 : _a.toString()) !== expId;
+        });
+        profile.experience = newexperience;
+        yield (profile === null || profile === void 0 ? void 0 : profile.save());
+        res.status(200).json(profile);
+    }
+    catch (error) {
+        console.log(error);
+        res.json(error);
+    }
+});
+// @route   put api/profile/education
+// @desc    Add profile education
+// @access  Private
+exports.putEducation = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { school, degree, fieldofstudy, from, to, current, description, } = req.body;
+    const education = {
+        school,
+        degree,
+        fieldofstudy,
+        from,
+        to,
+        current,
+        description,
+    };
+    try {
+        const profile = yield Profile_1.default.findOne({ user: req.user.id });
+        profile === null || profile === void 0 ? void 0 : profile.education.unshift(education);
+        yield (profile === null || profile === void 0 ? void 0 : profile.save());
+        res.status(200).json(profile);
+    }
+    catch (err) {
+        console.log(err.message);
+        res.status(500).send("Server Error");
+    }
+});
+// @route   DEL api/profile/education/:eduId
+// @desc    Delete profile education by id
+// @access  Private
+exports.delEducation = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const eduId = req.params.eduId;
+    try {
+        const profile = yield Profile_1.default.findOne({ user: req.user.id });
+        if (!profile) {
+            res.status(400).json({
+                msg: "Profile not found",
+            });
+        }
+        const newEducation = profile === null || profile === void 0 ? void 0 : profile.education.filter((edu) => {
+            var _a;
+            return ((_a = edu._id) === null || _a === void 0 ? void 0 : _a.toString()) !== eduId;
+        });
+        profile.education = newEducation;
+        yield (profile === null || profile === void 0 ? void 0 : profile.save());
+        res.status(200).json(profile);
+    }
+    catch (error) {
+        console.log(error);
+        res.json(error);
     }
 });
