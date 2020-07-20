@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.postNewPost = void 0;
+exports.deletePostById = exports.getAllPost = exports.postNewPost = void 0;
 const express_validator_1 = require("express-validator");
 const User_1 = __importDefault(require("../models/User"));
 const Posts_1 = __importDefault(require("../models/Posts"));
@@ -42,4 +42,47 @@ exports.postNewPost = (req, res, next) => __awaiter(void 0, void 0, void 0, func
         return res.status(500).json(error);
     }
     res.send("Posts route");
+});
+// @route GET api/posts
+// @desc get all the available posts
+// @access Publiuc
+exports.getAllPost = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const posts = yield Posts_1.default.find();
+        res.status(200).json(posts);
+    }
+    catch (err) {
+        console.log(err);
+        res.status(500).json(err);
+    }
+});
+// @route Del api/posts/postId
+// @desc delete post by ID
+// @access Private
+exports.deletePostById = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const postId = req.params.postId;
+    const userId = req.user.id;
+    try {
+        let post = yield Posts_1.default.findOne({ _id: postId });
+        if (!post) {
+            return res.status(400).json({
+                msg: "Post does not exist",
+            });
+        }
+        console.log(userId, post.user);
+        if (post.user.toString() !== userId) {
+            return res.status(400).json({
+                msg: "You cannot delete this post",
+            });
+        }
+        yield post.remove();
+        res.status(200).json({
+            msg: "Successfully deleted post",
+        });
+    }
+    catch (error) {
+        res.status(500).json({
+            msg: "Server Error",
+        });
+    }
 });

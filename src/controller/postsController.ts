@@ -34,3 +34,56 @@ export const postNewPost = async (
   }
   res.send("Posts route");
 };
+
+// @route GET api/posts
+// @desc get all the available posts
+// @access Publiuc
+export const getAllPost = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const posts = await Posts.find();
+    res.status(200).json(posts);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(err);
+  }
+};
+
+// @route Del api/posts/postId
+// @desc delete post by ID
+// @access Private
+export const deletePostById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const postId = req.params.postId;
+  const userId = req.user.id;
+
+  try {
+    let post = await Posts.findOne({ _id: postId });
+
+    if (!post) {
+      return res.status(400).json({
+        msg: "Post does not exist",
+      });
+    }
+    console.log(userId, post.user);
+    if (post.user!.toString() !== userId) {
+      return res.status(400).json({
+        msg: "You cannot delete this post",
+      });
+    }
+    await post.remove();
+    res.status(200).json({
+      msg: "Successfully deleted post",
+    });
+  } catch (error) {
+    res.status(500).json({
+      msg: "Server Error",
+    });
+  }
+};

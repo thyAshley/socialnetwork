@@ -28,4 +28,12 @@ const router = express_1.Router();
 // @desc Create a post
 // @access Private
 router.post("/", [authController.checkJWT, express_validator_1.check("text", "Text must not be empty").notEmpty()], postsController.postNewPost);
+// @route GET api/posts
+// @desc get all the available posts
+// @access Public
+router.get("/", postsController.getAllPost);
+// @route Del api/posts/postId
+// @desc delete post by ID
+// @access Private
+router.delete("/:postId", authController.checkJWT, postsController.deletePostById);
 exports.default = router;
