@@ -1,5 +1,6 @@
 import React, { Fragment, useState } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -17,13 +18,26 @@ const Register = () => {
     });
   };
 
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    if (password !== password2) {
+      console.log("Password mismatch");
+    } else {
+      console.log("To be implemented");
+    }
+  };
+
   return (
     <Fragment>
       <h1 className="large text-primary">Sign Up</h1>
       <p className="lead">
         <i className="fas fa-user"></i> Create Your Account
       </p>
-      <form className="form" action="create-profile.html">
+      <form
+        className="form"
+        action="create-profile.html"
+        onSubmit={(e) => onSubmit(e)}
+      >
         <div className="form-group">
           <input
             type="text"
@@ -42,10 +56,6 @@ const Register = () => {
             value={email}
             onChange={(e) => onChange(e)}
           />
-          <small className="form-text">
-            This site uses Gravatar so if you want a profile image, use a
-            Gravatar email
-          </small>
         </div>
         <div className="form-group">
           <input
@@ -72,7 +82,6 @@ const Register = () => {
       <p className="my-1">
         Already have an account? <Link to="/login">Sign In</Link>
       </p>
-      ;
     </Fragment>
   );
 };
