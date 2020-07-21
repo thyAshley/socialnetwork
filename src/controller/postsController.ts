@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from "express";
+import { Request, Response, NextFunction, json } from "express";
 import { validationResult } from "express-validator";
 import User from "../models/User";
 import Profile from "../models/Profile";
@@ -147,5 +147,88 @@ export const postUnlikebyId = async (
   } catch (error) {
     console.error(error.message);
     return res.status(500).send("Server Error");
+  }
+};
+
+// @route POST api/posts/:postId/comment
+// @desc Add a comment to a post
+// @access Private
+export const postAddComment = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const post = await Posts.findOne({ _id: req.params.postId });
+
+    const user = await User.findOne({ _id: req.user.id });
+    post?.comments!.push({
+      user: user!._id,
+      text: req.body.text,
+      name: user!.name,
+      avatar: user!.avatar,
+    });
+
+    await post?.save();
+    res.status(200).json({
+      msg: "Added post",
+      post,
+    });
+  } catch (error) {
+    console.log(error.kind);
+    if (error.kind === "ObjectId") {
+      return res.status(400).json({
+        msg: "Post does not exist, please try again later",
+      });
+    }
+    res.status(500).json({
+      msg: "Server Error",
+    });
+  }
+};
+
+// @route DEL api/posts/:postId/:commentId",
+// @desc Delete comment from post
+// @access Private
+export const delRemoveComment = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const post = await Posts.findById(req.params.postId);
+    const comment = post?.comments?.find((comment) => {
+      return comment._id!.toString() === req.params.commentId;
+    });
+    if (!comment) {
+      return res.status(500).json({
+        msg: "Post not found",
+      });
+    }
+
+    if (comment!.user?.toString() !== req.user.id) {
+      return res.status(401).json({
+        msg: "Not authorize to perform this action",
+      });
+    }
+
+    const newPost = post?.comments?.filter((comment) => {
+      return (
+        comment._id?.toString() !== req.params.commentId &&
+        comment.user !== req.user.id
+      );
+    }) as IPostSchema["comments"];
+
+    post!.comments = newPost;
+    await post?.save();
+    return res.status(200).json({
+      msg: "Post Added",
+      post,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      msg: "Server Error",
+    });
   }
 };

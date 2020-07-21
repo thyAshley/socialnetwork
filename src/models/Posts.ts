@@ -10,12 +10,13 @@ export interface IPostSchema extends Document {
       user?: string;
     }
   ];
-  comment?: [
+  comments?: [
     {
-      user?: mongoose.Schema.Types.ObjectId;
+      user?: string;
       text: string;
       name?: string;
       avatar?: string;
+      _id?: string;
     }
   ];
 }
