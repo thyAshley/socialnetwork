@@ -42,4 +42,22 @@ router.put(
   authController.checkJWT,
   postsController.postUnlikebyId
 );
+
+// @route POST api/posts/comment/:postId
+// @desc Add a comment to a post
+// @access Private
+router.post(
+  "/comment/:postId",
+  [authController.checkJWT, check("text", "A comment is required").notEmpty()],
+  postsController.postAddComment
+);
+
+// @route DEL api/posts/:postId/:commentId",
+// @desc Delete comment from post
+// @access Private
+router.delete(
+  "/:postId/:commentId",
+  authController.checkJWT,
+  postsController.delRemoveComment
+);
 export default router;

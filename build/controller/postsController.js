@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.postUnlikebyId = exports.postLikebyId = exports.deletePostById = exports.getAllPost = exports.postNewPost = void 0;
+exports.delRemoveComment = exports.postAddComment = exports.postUnlikebyId = exports.postLikebyId = exports.deletePostById = exports.getAllPost = exports.postNewPost = void 0;
 const express_validator_1 = require("express-validator");
 const User_1 = __importDefault(require("../models/User"));
 const Posts_1 = __importDefault(require("../models/Posts"));
@@ -129,5 +129,75 @@ exports.postUnlikebyId = (req, res, next) => __awaiter(void 0, void 0, void 0, f
     catch (error) {
         console.error(error.message);
         return res.status(500).send("Server Error");
+    }
+});
+// @route POST api/posts/:postId/comment
+// @desc Add a comment to a post
+// @access Private
+exports.postAddComment = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const post = yield Posts_1.default.findOne({ _id: req.params.postId });
+        const user = yield User_1.default.findOne({ _id: req.user.id });
+        post === null || post === void 0 ? void 0 : post.comments.push({
+            user: user._id,
+            text: req.body.text,
+            name: user.name,
+            avatar: user.avatar,
+        });
+        yield (post === null || post === void 0 ? void 0 : post.save());
+        res.status(200).json({
+            msg: "Added post",
+            post,
+        });
+    }
+    catch (error) {
+        console.log(error.kind);
+        if (error.kind === "ObjectId") {
+            return res.status(400).json({
+                msg: "Post does not exist, please try again later",
+            });
+        }
+        res.status(500).json({
+            msg: "Server Error",
+        });
+    }
+});
+// @route DEL api/posts/:postId/:commentId",
+// @desc Delete comment from post
+// @access Private
+exports.delRemoveComment = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    var _f, _g, _h;
+    try {
+        const post = yield Posts_1.default.findById(req.params.postId);
+        const comment = (_f = post === null || post === void 0 ? void 0 : post.comments) === null || _f === void 0 ? void 0 : _f.find((comment) => {
+            return comment._id.toString() === req.params.commentId;
+        });
+        if (!comment) {
+            return res.status(500).json({
+                msg: "Post not found",
+            });
+        }
+        if (((_g = comment.user) === null || _g === void 0 ? void 0 : _g.toString()) !== req.user.id) {
+            return res.status(401).json({
+                msg: "Not authorize to perform this action",
+            });
+        }
+        const newPost = (_h = post === null || post === void 0 ? void 0 : post.comments) === null || _h === void 0 ? void 0 : _h.filter((comment) => {
+            var _a;
+            return (((_a = comment._id) === null || _a === void 0 ? void 0 : _a.toString()) !== req.params.commentId &&
+                comment.user !== req.user.id);
+        });
+        post.comments = newPost;
+        yield (post === null || post === void 0 ? void 0 : post.save());
+        return res.status(200).json({
+            msg: "Post Added",
+            post,
+        });
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).json({
+            msg: "Server Error",
+        });
     }
 });
