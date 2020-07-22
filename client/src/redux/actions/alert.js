@@ -1,7 +1,7 @@
 import * as types from "../constant/types";
 import * as uuid from "uuid";
 
-export const setAlert = (msg, alertType) => {
+export const setAlert = (msg, alertType, timeout = 2500) => {
   return (dispatch) => {
     const id = uuid.v4();
     dispatch({
@@ -15,6 +15,6 @@ export const setAlert = (msg, alertType) => {
 
     setTimeout(() => {
       dispatch({ type: types.CLEAR_ALERT, payload: id });
-    }, 5000);
+    }, timeout);
   };
 };
