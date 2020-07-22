@@ -26,6 +26,21 @@ export default (state = initialState, action) => {
         loading: false,
         isAuth: false,
       };
+    case types.USER_LOADED:
+      return {
+        ...state,
+        isAuth: true,
+        loading: false,
+        user: payload,
+      };
+    case types.AUTH_ERROR:
+      localStorage.removeItem("token");
+      return {
+        ...state,
+        token: null,
+        loading: false,
+        isAuth: false,
+      };
     default:
       return state;
   }
