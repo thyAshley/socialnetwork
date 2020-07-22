@@ -41,6 +41,22 @@ export default (state = initialState, action) => {
         loading: false,
         isAuth: false,
       };
+    case types.LOGIN_SUCCESS:
+      localStorage.setItem("token", payload.token);
+      return {
+        ...state,
+        token: payload.token,
+        isAuth: true,
+        loading: false,
+      };
+    case types.LOGIN_FAIL:
+      localStorage.removeItem("token");
+      return {
+        ...state,
+        token: null,
+        loading: false,
+        isAuth: false,
+      };
     default:
       return state;
   }
