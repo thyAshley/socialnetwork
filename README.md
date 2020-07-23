@@ -13,11 +13,23 @@ This is a application built with the following technology stack
 
 APIs:
 
-- /api/users
+/api/users
 
-Completed functions
+- Sign up user | @post /api/users/signup
 
-- Sign up user [X] @post /api/users/signup
-- Sign in user [X] @post /api/users/login
-- Delete user [-]
-- Authenticate user with jwt [X]
+/api/auth
+
+- Sign in user | @post /api/auth/login
+- Delete user | @del /api/auth/delete
+
+/api/posts
+
+- Show all post to user @get /api/posts
+- Allow user to create post @post /api/posts
+- Allow user to delete post @post /api/posts/:postid
+- Allow user to add comment @post /api/posts/comment/:postId
+- Allow user to del comment @del /api/posts/comment/:postId
+- Allow user to like a post @put /api/posts/like/:postId
+- Allow user to unlike a post @put /api/posts/unlike/:postId
+
+* Authenticate user with jwt

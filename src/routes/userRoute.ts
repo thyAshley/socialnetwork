@@ -2,7 +2,7 @@ import { Router } from "express";
 
 import * as userController from "../controller/userController";
 
-import { body } from "express-validator";
+import { check } from "express-validator";
 
 const router = Router();
 
@@ -12,9 +12,9 @@ const router = Router();
 router.post(
   "/signup",
   [
-    body("name", "Name is required").not().isEmpty().trim().escape(),
-    body("email", "Please include a valid email").isEmail().normalizeEmail(),
-    body(
+    check("name", "Name is required").notEmpty().trim().escape(),
+    check("email", "Please include a valid email").isEmail().normalizeEmail(),
+    check(
       "password",
       "Please enter a password with 6 or more characters"
     ).isLength({ min: 6 }),

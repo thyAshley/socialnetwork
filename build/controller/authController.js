@@ -65,9 +65,11 @@ exports.checkJWT = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
 exports.postLogin = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const error = express_validator_1.validationResult(req);
     if (!error.isEmpty()) {
-        return res.status(400).json({
-            error,
-        });
+        return res.status(400).json([
+            {
+                error,
+            },
+        ]);
     }
     const { email, password } = req.body;
     try {
@@ -79,9 +81,11 @@ exports.postLogin = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
         }
         const isAuth = yield bcryptjs_1.default.compare(password, user.password);
         if (!isAuth) {
-            return res.status(401).json({
-                msg: "Login Fail, Invalid Credentials",
-            });
+            return res.status(401).json([
+                {
+                    msg: "Login Fail, Invalid Credentials",
+                },
+            ]);
         }
         const payload = {
             user: {

@@ -69,3 +69,10 @@ export const login = (email, password) => async (dispatch) => {
     });
   }
 };
+
+// Logout User
+export const logout = () => async (dispatch) => {
+  return dispatch({
+    type: types.LOGOUT,
+  });
+};
