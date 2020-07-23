@@ -65,9 +65,11 @@ export const postLogin = async (
 ) => {
   const error = validationResult(req);
   if (!error.isEmpty()) {
-    return res.status(400).json({
-      error,
-    });
+    return res.status(400).json([
+      {
+        error,
+      },
+    ]);
   }
 
   const { email, password } = req.body;
@@ -83,9 +85,11 @@ export const postLogin = async (
     const isAuth = await bcrypt.compare(password, user!.password);
 
     if (!isAuth) {
-      return res.status(401).json({
-        msg: "Login Fail, Invalid Credentials",
-      });
+      return res.status(401).json([
+        {
+          msg: "Login Fail, Invalid Credentials",
+        },
+      ]);
     }
 
     const payload = {

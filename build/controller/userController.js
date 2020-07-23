@@ -30,11 +30,7 @@ exports.getUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function
         let user = yield User_1.default.findOne({ email });
         if (user) {
             return res.status(400).json({
-                errors: [
-                    {
-                        msg: "User already exist",
-                    },
-                ],
+                errors: [{ msg: "User already exist" }],
             });
         }
         const salt = yield bcryptjs_1.default.genSalt(10);
@@ -60,7 +56,6 @@ exports.getUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function
         });
     }
     catch (err) {
-        console.log(err.message);
         res.status(500).send("Server error");
     }
 });

@@ -18,7 +18,6 @@ export const getUser = async (
 ) => {
   // Check if Input from user is valid
   const errors = validationResult(req);
-
   if (!errors.isEmpty()) {
     return res.status(400).json({
       errors: errors.array(),
@@ -32,11 +31,7 @@ export const getUser = async (
 
     if (user) {
       return res.status(400).json({
-        errors: [
-          {
-            msg: "User already exist",
-          },
-        ],
+        errors: [{ msg: "User already exist" }],
       });
     }
 
@@ -69,7 +64,6 @@ export const getUser = async (
       }
     );
   } catch (err) {
-    console.log(err.message);
     res.status(500).send("Server error");
   }
 };

@@ -27,8 +27,8 @@ const router = express_1.Router();
 // @desc    Register user
 // @access  Public
 router.post("/signup", [
-    express_validator_1.body("name", "Name is required").not().isEmpty().trim().escape(),
-    express_validator_1.body("email", "Please include a valid email").isEmail().normalizeEmail(),
-    express_validator_1.body("password", "Please enter a password with 6 or more characters").isLength({ min: 6 }),
+    express_validator_1.check("name", "Name is required").notEmpty().trim().escape(),
+    express_validator_1.check("email", "Please include a valid email").isEmail().normalizeEmail(),
+    express_validator_1.check("password", "Please enter a password with 6 or more characters").isLength({ min: 6 }),
 ], userController.getUser);
 exports.default = router;

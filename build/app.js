@@ -13,7 +13,7 @@ const postsRoute_1 = __importDefault(require("./routes/postsRoute"));
 const profileRoute_1 = __importDefault(require("./routes/profileRoute"));
 // initialisation
 const app = express_1.default();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 // Middlewares
 app.use(express_1.default.urlencoded({ extended: true }));
 app.use(express_1.default.json());
