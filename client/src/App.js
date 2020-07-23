@@ -8,6 +8,7 @@ import Login from "./components/auth/Login";
 import Alert from "./components/layout/Alert";
 import Dashboard from "./components/dashboard/Dashboard";
 import PrivateRoute from "./components/utils/PrivateRoute";
+import CreateProfile from "./components/profile-form/CreateProfile";
 
 import "./App.css";
 import { Provider } from "react-redux";
@@ -25,12 +26,14 @@ const App = () => {
         <Fragment>
           <Navbar />
           <Route exact path="/" component={Landing} />
+
           <section className="container">
             <Alert />
             <Switch>
               <Route path="/register" component={Register} />
               <Route path="/login" component={Login} />
               <PrivateRoute path="/dashboard" component={Dashboard} />
+              <PrivateRoute path="/create-profile" component={CreateProfile} />
             </Switch>
           </section>
         </Fragment>
