@@ -8,7 +8,6 @@ export const getUserProfile = () => async (dispatch) => {
     const res = await axios.get("/api/profile/me");
     dispatch({ type: types.GET_PROFILE, payload: res.data });
   } catch (error) {
-    console.log(error.response);
     dispatch({
       type: types.PROFILE_ERROR,
       payload: {

@@ -2,7 +2,7 @@ import * as types from "../constant/types";
 
 const initialState = {
   profile: null,
-  profiles: [],
+  profiles: null,
   repos: [],
   loading: true,
   error: false,
@@ -21,6 +21,11 @@ export default (state = initialState, actions) => {
       return {
         ...state,
         error: payload,
+        loading: false,
+      };
+    case types.CLEAR_PROFILE:
+      return {
+        ...initialState,
         loading: false,
       };
     default:
