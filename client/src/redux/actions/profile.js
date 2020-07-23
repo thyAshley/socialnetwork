@@ -1,7 +1,6 @@
 import axios from "axios";
 
 import * as types from "../constant/types";
-import { setAlert } from "./alert";
 
 // Get current user profile
 export const getUserProfile = () => async (dispatch) => {
