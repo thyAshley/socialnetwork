@@ -5,6 +5,7 @@ import { validationResult } from "express-validator";
 
 import User from "../models/User";
 import Profile from "../models/Profile";
+import Posts from "../models/Posts";
 
 // @route   GET api/auth
 // @desc    Get auth user information
@@ -126,15 +127,16 @@ export const deleteUser = async (
   next: NextFunction
 ) => {
   try {
+    await Posts.deleteMany({ user: req.user.id });
     await Profile.findOneAndRemove({ user: req.user.id });
     await User.findOneAndRemove({ _id: req.user.id });
     res.status(204).json({
       msg: "user successfully deleted",
     });
   } catch (error) {
-    console.log(error.message);
     res.status(500).json({
       msg: "Server Error",
+      error: error,
     });
   }
 };

@@ -57,6 +57,7 @@ export default (state = initialState, action) => {
         loading: false,
         isAuth: false,
       };
+    case types.DELETE_ACCOUNT:
     case types.LOGOUT:
       localStorage.removeItem("token");
       return {

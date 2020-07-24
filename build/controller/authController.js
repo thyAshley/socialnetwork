@@ -18,6 +18,7 @@ const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const express_validator_1 = require("express-validator");
 const User_1 = __importDefault(require("../models/User"));
 const Profile_1 = __importDefault(require("../models/Profile"));
+const Posts_1 = __importDefault(require("../models/Posts"));
 // @route   GET api/auth
 // @desc    Get auth user information
 // @access  Private
@@ -112,6 +113,7 @@ exports.postLogin = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
 // @access  Private
 exports.deleteUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        yield Posts_1.default.deleteMany({ user: req.user.id });
         yield Profile_1.default.findOneAndRemove({ user: req.user.id });
         yield User_1.default.findOneAndRemove({ _id: req.user.id });
         res.status(204).json({
@@ -119,9 +121,9 @@ exports.deleteUser = (req, res, next) => __awaiter(void 0, void 0, void 0, funct
         });
     }
     catch (error) {
-        console.log(error.message);
         res.status(500).json({
             msg: "Server Error",
+            error: error,
         });
     }
 });
