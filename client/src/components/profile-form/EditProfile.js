@@ -1,11 +1,16 @@
-import React, { useState, Fragment } from "react";
+import React, { useState, Fragment, useEffect } from "react";
 import { withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
-import { addUserProfile } from "../../redux/actions/profile";
+import { addUserProfile, getUserProfile } from "../../redux/actions/profile";
 
-const CreateProfile = ({ addUserProfile, history }) => {
+const EditProfile = ({
+  profile: { profile, loading },
+  addUserProfile,
+  getUserProfile,
+  history,
+}) => {
   const [formData, setFormData] = useState({
     company: "",
     website: "",
@@ -20,8 +25,18 @@ const CreateProfile = ({ addUserProfile, history }) => {
     youtube: "",
     instagram: "",
   });
-
   const [displaySocial, toggleDisplaySocial] = useState(false);
+
+  useEffect(() => {
+    if (!loading) {
+      setFormData({
+        ...profile,
+        skills: profile.skills.join(","),
+      });
+    } else {
+      getUserProfile();
+    }
+  }, [loading]);
 
   const {
     company,
@@ -219,8 +234,16 @@ const CreateProfile = ({ addUserProfile, history }) => {
   );
 };
 
-CreateProfile.propTypes = {
+EditProfile.propTypes = {
   addUserProfile: PropTypes.func.isRequired,
+  getUserProfile: PropTypes.func.isRequired,
+  profile: PropTypes.object.isRequired,
 };
 
-export default connect(null, { addUserProfile })(withRouter(CreateProfile));
+const mapStateToProps = (state) => ({
+  profile: state.profileReducer,
+});
+
+export default connect(mapStateToProps, { addUserProfile, getUserProfile })(
+  withRouter(EditProfile)
+);

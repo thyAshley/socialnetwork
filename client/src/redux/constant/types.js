@@ -9,6 +9,8 @@ export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
 export const LOGIN_FAIL = "LOGIN_FAIL";
 export const LOGOUT = "LOGOUT";
 export const CLEAR_PROFILE = "CLEAR_PROFILE";
+export const UPDATE_PROFILE = "UPDATE_PROFILE";
+export const UPDATE_EDUCATION = "UPDATE_EDUCATION";
 
 // Authenticate User on page load action
 export const USER_LOADED = "USER_LOADED";

@@ -28,6 +28,18 @@ export default (state = initialState, actions) => {
         ...initialState,
         loading: false,
       };
+    case types.UPDATE_PROFILE:
+      return {
+        ...state,
+        profile: payload,
+        loading: false,
+      };
+    case types.UPDATE_EDUCATION:
+      return {
+        ...state,
+        profile: payload,
+        loading: false,
+      };
     default:
       return state;
   }
