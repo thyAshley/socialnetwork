@@ -85,7 +85,6 @@ export const addEducation = (formData, history, edit = false) => async (
     history.push("/dashboard");
   } catch (error) {
     const errs = error.response.data.error.errors;
-    console.log(errs);
     if (errs) {
       errs.forEach((err) => dispatch(setAlert(err.msg, "danger")));
     }

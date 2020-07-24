@@ -200,6 +200,12 @@ exports.putEducation = (req, res, next) => __awaiter(void 0, void 0, void 0, fun
         description,
     };
     try {
+        const errors = express_validator_1.validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({
+                error: errors,
+            });
+        }
         const profile = yield Profile_1.default.findOne({ user: req.user.id });
         profile === null || profile === void 0 ? void 0 : profile.education.unshift(education);
         yield (profile === null || profile === void 0 ? void 0 : profile.save());
