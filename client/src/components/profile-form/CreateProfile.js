@@ -50,7 +50,6 @@ const CreateProfile = ({ addUserProfile, history }) => {
     addUserProfile(formData, history);
   };
 
-  const toggleSocialInputs = () => {};
   return (
     <Fragment>
       <h1 className="large text-primary">Create Your Profile</h1>
