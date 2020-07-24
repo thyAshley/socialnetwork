@@ -17,6 +17,18 @@ export default (state = initialState, actions) => {
         profile: payload,
         loading: false,
       };
+    case types.GET_PROFILES:
+      return {
+        ...state,
+        profiles: payload,
+        loading: false,
+      };
+    case types.GET_GITHUB:
+      return {
+        ...state,
+        reports: payload,
+        loading: false,
+      };
     case types.PROFILE_ERROR:
       return {
         ...state,
@@ -27,6 +39,8 @@ export default (state = initialState, actions) => {
       return {
         ...initialState,
         loading: false,
+        repos: [],
+        profile: null,
       };
     case types.UPDATE_PROFILE:
       return {

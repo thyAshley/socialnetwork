@@ -159,3 +159,50 @@ export const delAccount = (id) => async (dispatch) => {
     }
   }
 };
+
+// Get Profile
+export const getProfiles = () => async (dispatch) => {
+  dispatch({ type: types.CLEAR_PROFILE });
+  try {
+    const res = await axios.get("/api/profile");
+    dispatch({ type: types.GET_PROFILES, payload: res.data });
+  } catch (error) {
+    dispatch({
+      type: types.PROFILE_ERROR,
+      payload: {
+        msg: error.response.statusText,
+        status: error.response.status,
+      },
+    });
+  }
+};
+
+export const getProfile = (id) => async (dispatch) => {
+  try {
+    const res = await axios.get(`/api/profile/user/${id}`);
+    dispatch({ type: types.GET_PROFILE, payload: res.data });
+  } catch (error) {
+    dispatch({
+      type: types.PROFILE_ERROR,
+      payload: {
+        msg: error.response.statusText,
+        status: error.response.status,
+      },
+    });
+  }
+};
+
+export const getGithubReports = (githubusername) => async (dispatch) => {
+  try {
+    const res = await axios.get(`/api/profile/github/${githubusername}`);
+    dispatch({ type: types.GET_GITHUB, payload: res.data });
+  } catch (error) {
+    dispatch({
+      type: types.PROFILE_ERROR,
+      payload: {
+        msg: error.response.statusText,
+        status: error.response.status,
+      },
+    });
+  }
+};
