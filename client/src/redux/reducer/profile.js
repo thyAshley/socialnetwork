@@ -40,6 +40,26 @@ export default (state = initialState, actions) => {
         profile: payload,
         loading: false,
       };
+    case types.DELETE_EXPERIENCE:
+      console.log(payload);
+      return {
+        ...state,
+        profile: {
+          ...state.profile,
+          experience: payload,
+        },
+        loading: false,
+      };
+    case types.DELETE_EDUCATION:
+      console.log(payload);
+      return {
+        ...state,
+        profile: {
+          ...state.profile,
+          education: payload,
+        },
+        loading: false,
+      };
     default:
       return state;
   }

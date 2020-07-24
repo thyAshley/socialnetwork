@@ -11,10 +11,12 @@ export const LOGOUT = "LOGOUT";
 export const CLEAR_PROFILE = "CLEAR_PROFILE";
 export const UPDATE_PROFILE = "UPDATE_PROFILE";
 export const UPDATE_EDUCATION = "UPDATE_EDUCATION";
-
+export const DELETE_EDUCATION = "DELETE_EDUCATION";
+export const DELETE_EXPERIENCE = "DELETE_EXPERIENCE";
 // Authenticate User on page load action
 export const USER_LOADED = "USER_LOADED";
 export const AUTH_ERROR = "AUTH_ERROR";
+export const DELETE_ACCOUNT = "DELETE_ACCOUNT";
 
 // Profile actions
 export const GET_PROFILE = "GET_PROFILE";

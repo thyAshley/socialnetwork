@@ -266,6 +266,12 @@ export const putEducation = async (
   };
 
   try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        error: errors,
+      });
+    }
     const profile = await Profile.findOne({ user: req.user.id });
     profile?.education.unshift(education);
     await profile?.save();

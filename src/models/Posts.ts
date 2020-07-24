@@ -1,7 +1,7 @@
 import mongoose, { Document, mongo } from "mongoose";
 
 export interface IPostSchema extends Document {
-  user?: mongoose.Schema.Types.ObjectId;
+  user?: string;
   type: string;
   name?: string;
   avatar?: string;
