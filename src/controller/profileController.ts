@@ -73,7 +73,6 @@ export const postProfile = async (
     status,
     githubusername,
   } as IProfileSchema;
-
   if (skills) {
     profileFields.skills = skills
       .split(",")
