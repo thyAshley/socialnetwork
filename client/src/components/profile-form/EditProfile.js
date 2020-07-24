@@ -62,7 +62,7 @@ const EditProfile = ({
 
   const onSubmit = (e) => {
     e.preventDefault();
-    addUserProfile(formData, history, true);
+    addUserProfile(formData, history);
   };
 
   const toggleSocialInputs = () => {};
