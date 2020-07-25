@@ -7,6 +7,8 @@ import Spinner from "../layout/Spinner";
 import { getProfile } from "../../redux/actions/profile";
 import ProfileTop from "./ProfileTop";
 import ProfileAbout from "./ProfileAbout";
+import ProfileExperience from "./ProfileExperience";
+import ProfileEducation from "./ProfileEducation";
 import auth from "../../redux/reducer/auth";
 
 const UserProfile = ({
@@ -41,11 +43,13 @@ const UserProfile = ({
           Edit profile
         </Link>
       )}
-      <div class="profile-grid my-1">
+      <div className="profile-grid my-1">
         {profile !== null && (
           <Fragment>
             <ProfileTop profile={profile.profile} />
             <ProfileAbout profile={profile.profile} />
+            <ProfileExperience profile={profile.profile} />
+            <ProfileEducation profile={profile.profile} />
           </Fragment>
         )}
       </div>

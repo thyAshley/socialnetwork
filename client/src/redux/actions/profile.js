@@ -185,7 +185,7 @@ export const getProfile = (id) => async (dispatch) => {
     dispatch({
       type: types.PROFILE_ERROR,
       payload: {
-        msg: error.response.statusText,
+        msg: error.response,
         status: error.response.status,
       },
     });
