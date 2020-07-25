@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import Spinner from "../layout/Spinner";
 import { getProfile } from "../../redux/actions/profile";
 import ProfileTop from "./ProfileTop";
+import ProfileAbout from "./ProfileAbout";
 import auth from "../../redux/reducer/auth";
 
 const UserProfile = ({
@@ -41,7 +42,12 @@ const UserProfile = ({
         </Link>
       )}
       <div class="profile-grid my-1">
-        {profile !== null && <ProfileTop profile={profile.profile} />}
+        {profile !== null && (
+          <Fragment>
+            <ProfileTop profile={profile.profile} />
+            <ProfileAbout profile={profile.profile} />
+          </Fragment>
+        )}
       </div>
     </Fragment>
   );

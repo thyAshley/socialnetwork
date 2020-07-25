@@ -42,6 +42,7 @@ const EditProfile = ({
     instagram,
   } = formData;
 
+  console.log(formData.social);
   useEffect(() => {
     if (!loading) {
       setFormData({
