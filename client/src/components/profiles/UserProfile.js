@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 
 import Spinner from "../layout/Spinner";
 import { getProfile } from "../../redux/actions/profile";
+import ProfileTop from "./ProfileTop";
 import auth from "../../redux/reducer/auth";
 
 const UserProfile = ({
@@ -39,6 +40,9 @@ const UserProfile = ({
           Edit profile
         </Link>
       )}
+      <div class="profile-grid my-1">
+        {profile !== null && <ProfileTop profile={profile.profile} />}
+      </div>
     </Fragment>
   );
 };
