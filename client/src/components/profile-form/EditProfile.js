@@ -27,17 +27,6 @@ const EditProfile = ({
   });
   const [displaySocial, toggleDisplaySocial] = useState(false);
 
-  useEffect(() => {
-    if (!loading) {
-      setFormData({
-        ...profile,
-        skills: profile.skills.join(","),
-      });
-    } else {
-      getUserProfile();
-    }
-  }, [loading]);
-
   const {
     company,
     website,
@@ -53,6 +42,17 @@ const EditProfile = ({
     instagram,
   } = formData;
 
+  useEffect(() => {
+    if (!loading) {
+      setFormData({
+        ...profile,
+        skills: profile.skills.join(","),
+      });
+    } else {
+      getUserProfile();
+    }
+  }, [loading]);
+
   const onChange = (e) => {
     setFormData({
       ...formData,
@@ -62,7 +62,7 @@ const EditProfile = ({
 
   const onSubmit = (e) => {
     e.preventDefault();
-    addUserProfile(formData, history);
+    addUserProfile(formData, history, true);
   };
 
   return (
