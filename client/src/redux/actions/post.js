@@ -113,3 +113,38 @@ export const removeLike = (postId) => async (dispatch) => {
     });
   }
 };
+
+export const addComment = (postId, data) => async (dispatch) => {
+  try {
+    const res = await axios.post(`/api/posts/comment/${postId}`, data);
+    dispatch({
+      type: types.ADD_COMMENT,
+      payload: res.data,
+    });
+    dispatch(setAlert("Comment Added", "success"));
+  } catch (error) {
+    dispatch({
+      type: types.POST_ERROR,
+      payload: {
+        msg: error.response,
+      },
+    });
+  }
+};
+export const delComment = (postId, commentId) => async (dispatch) => {
+  try {
+    const res = await axios.delete(`api/posts/${postId}/${commentId}`);
+    dispatch({
+      type: types.REMOVE_COMMENT,
+      payload: commentId,
+    });
+    dispatch(setAlert("Comment Removed", "success"));
+  } catch (error) {
+    dispatch({
+      type: types.POST_ERROR,
+      payload: {
+        msg: error.response,
+      },
+    });
+  }
+};
