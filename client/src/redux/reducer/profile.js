@@ -26,7 +26,7 @@ export default (state = initialState, actions) => {
     case types.GET_GITHUB:
       return {
         ...state,
-        reports: payload,
+        repos: payload.response,
         loading: false,
       };
     case types.PROFILE_ERROR:
