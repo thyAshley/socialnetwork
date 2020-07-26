@@ -183,6 +183,7 @@ exports.delRemoveComment = (req, res, next) => __awaiter(void 0, void 0, void 0,
     var _f, _g, _h;
     try {
         const post = yield Posts_1.default.findById(req.params.postId);
+        console.log(post);
         const comment = (_f = post === null || post === void 0 ? void 0 : post.comments) === null || _f === void 0 ? void 0 : _f.find((comment) => {
             return comment._id.toString() === req.params.commentId;
         });

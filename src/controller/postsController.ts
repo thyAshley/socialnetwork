@@ -213,6 +213,7 @@ export const delRemoveComment = async (
 ) => {
   try {
     const post = await Posts.findById(req.params.postId);
+    console.log(post);
     const comment = post?.comments?.find((comment) => {
       return comment._id!.toString() === req.params.commentId;
     });
