@@ -32,6 +32,10 @@ router.post("/", [authController.checkJWT, express_validator_1.check("text", "Te
 // @desc get all the available posts
 // @access Public
 router.get("/", postsController.getAllPost);
+// @route GET api/posts/:postId
+// @desc get oost by ID
+// @access Public
+router.get("/:postId", postsController.getPostById);
 // @route DEL api/posts/postId
 // @desc delete post by ID
 // @access Private

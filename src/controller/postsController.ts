@@ -85,6 +85,23 @@ export const deletePostById = async (
   }
 };
 
+export const getPostById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    console.log(req.params.postId);
+    const post = await Posts.findById(req.params.postId);
+    if (post) {
+      return res.status(200).json(post);
+    }
+  } catch (error) {
+    return res.status(500).json({
+      msg: "Error",
+    });
+  }
+};
 // @route PUT api/posts/like/:id
 // @desc like a post
 // @access Private

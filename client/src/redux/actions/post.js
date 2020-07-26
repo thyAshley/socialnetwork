@@ -20,6 +20,24 @@ export const getPosts = () => async (dispatch) => {
   }
 };
 
+export const getPost = (postId) => async (dispatch) => {
+  try {
+    const res = await axios.get(`/api/posts/${postId}`);
+    dispatch({
+      type: types.GET_POST,
+      payload: res.data,
+    });
+  } catch (error) {
+    dispatch({
+      type: types.POST_ERROR,
+      payload: {
+        msg: error.response,
+        status: error.response.status,
+      },
+    });
+  }
+};
+
 export const removePost = (postId) => async (dispatch) => {
   try {
     await axios.delete(`/api/posts/${postId}`);

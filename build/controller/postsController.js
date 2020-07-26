@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.delRemoveComment = exports.postAddComment = exports.postUnlikebyId = exports.postLikebyId = exports.deletePostById = exports.getAllPost = exports.postNewPost = void 0;
+exports.delRemoveComment = exports.postAddComment = exports.postUnlikebyId = exports.postLikebyId = exports.getPostById = exports.deletePostById = exports.getAllPost = exports.postNewPost = void 0;
 const express_validator_1 = require("express-validator");
 const User_1 = __importDefault(require("../models/User"));
 const Posts_1 = __importDefault(require("../models/Posts"));
@@ -80,6 +80,20 @@ exports.deletePostById = (req, res, next) => __awaiter(void 0, void 0, void 0, f
         }
         res.status(500).json({
             msg: "Server Error",
+        });
+    }
+});
+exports.getPostById = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        console.log(req.params.postId);
+        const post = yield Posts_1.default.findById(req.params.postId);
+        if (post) {
+            return res.status(200).json(post);
+        }
+    }
+    catch (error) {
+        return res.status(500).json({
+            msg: "Error",
         });
     }
 });
