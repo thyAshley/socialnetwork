@@ -38,6 +38,27 @@ export const removePost = (postId) => async (dispatch) => {
   }
 };
 
+export const addPost = (text) => async (dispatch) => {
+  try {
+    const res = await axios.post(`/api/posts`, {
+      text,
+    });
+    dispatch({
+      type: types.ADD_POST,
+      payload: res.data.post,
+    });
+    dispatch(setAlert("Post Created", "success"));
+  } catch (error) {
+    console.log(error.response);
+    dispatch({
+      type: types.POST_ERROR,
+      payload: {
+        msg: error.response,
+      },
+    });
+  }
+};
+
 export const addLike = (postId) => async (dispatch) => {
   try {
     const res = await axios.put(`/api/posts/like/${postId}`);
