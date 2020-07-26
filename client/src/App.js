@@ -14,6 +14,7 @@ import AddExperience from "./components/profile-form/AddExperience";
 import AddEducation from "./components/profile-form/AddEducation";
 import Profiles from "./components/profiles/Profiles";
 import UserProfile from "./components/profiles/UserProfile";
+import Posts from "./components/posts/Posts";
 
 import "./App.css";
 import { Provider } from "react-redux";
@@ -44,6 +45,7 @@ const App = () => {
               <PrivateRoute path="/edit-profile" component={EditProfile} />
               <PrivateRoute path="/add-experience" component={AddExperience} />
               <PrivateRoute path="/add-education" component={AddEducation} />
+              <PrivateRoute path="/posts" component={Posts} />
             </Switch>
           </section>
         </Fragment>
