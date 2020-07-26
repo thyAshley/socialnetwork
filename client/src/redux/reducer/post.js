@@ -17,6 +17,11 @@ export default (state = initialState, action) => {
         posts: payload,
         loading: false,
       };
+    case types.DELETE_POSTS:
+      return {
+        ...state,
+        posts: state.posts.filter((post) => post._id !== payload.id),
+      };
     case types.POST_ERROR:
       return {
         ...state,
@@ -24,7 +29,6 @@ export default (state = initialState, action) => {
         loading: false,
       };
     case types.UPDATE_LIKES:
-      console.log(payload.likes[0]);
       return {
         ...state,
         posts: state.posts.map((post) =>

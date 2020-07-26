@@ -20,6 +20,24 @@ export const getPosts = () => async (dispatch) => {
   }
 };
 
+export const removePost = (postId) => async (dispatch) => {
+  try {
+    await axios.delete(`/api/posts/${postId}`);
+    dispatch(setAlert("Post Removed", "success"));
+    dispatch({
+      type: types.DELETE_POSTS,
+      payload: { id: postId },
+    });
+  } catch (error) {
+    dispatch({
+      type: types.POST_ERROR,
+      payload: {
+        msg: error.response,
+      },
+    });
+  }
+};
+
 export const addLike = (postId) => async (dispatch) => {
   try {
     const res = await axios.put(`/api/posts/like/${postId}`);

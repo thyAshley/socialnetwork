@@ -63,7 +63,7 @@ exports.deletePostById = (req, res, next) => __awaiter(void 0, void 0, void 0, f
     const postId = req.params.postId;
     const userId = req.user.id;
     try {
-        let post = yield Posts_1.default.findById({ postId });
+        let post = yield Posts_1.default.findById(postId);
         if ((post === null || post === void 0 ? void 0 : post.user.toString()) !== userId) {
             return res.status(400).json({
                 msg: "You are not authorized to delete this post",
